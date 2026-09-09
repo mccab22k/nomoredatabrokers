@@ -2,69 +2,92 @@
 
 **Take your data back. It's yours.**
 
-Data brokers collect your personal information — name, address, phone, employer, relatives, income estimates — without your consent, compile it into profiles, and sell it to anyone willing to pay. Then they offer to "protect" you if you subscribe to their removal service. The same people selling your data are selling the fix.
-
-This is a free, open-source tool to systematically opt out yourself.
+No More Data Brokers is a free, open-source, local-only tool for systematically opting out of data brokers without paying for a removal subscription.
 
 ## What this does
 
-- Tracks your removal progress across 28+ data brokers, tiered by priority
-- Links directly to each broker's opt-out portal
-- Flags when removals have expired and need to be resubmitted (brokers re-scrape every 3–6 months)
-- Includes B2B brokers (ZoomInfo, Apollo, Lusha) that sell your professional identity to sales teams
-- Covers the Google visibility tools that de-index your info from search results
-- Exports your progress as JSON so you can back it up
+- Tracks removal progress across 28+ data brokers, tiered by priority
+- Links directly to broker opt-out, claim, and privacy-request routes
+- Stores **multiple email addresses, phone numbers, and previous cities** in your local profile
+- Keeps employer information optional
+- Migrates older single-email / single-phone saved profiles automatically
+- Provides a **form clipboard** so external privacy forms are faster to complete
+- Provides an **email removal queue** for brokers with documented privacy addresses, generating a separate pre-filled request for each broker
+- Flags removals that need to be rechecked after broker-specific intervals
+- Includes B2B brokers such as ZoomInfo, Apollo, Lusha, Hunter, and Snov.io
+- Includes the California DROP portal for registered data brokers
 
-**No account. No server. No data leaves your browser.** All state is stored in your browser's localStorage.
+**No account. No server. No profile data leaves your browser.** Profile and progress state are stored only in browser `localStorage`.
+
+## Current notable routes
+
+- **Acxiom:** OneTrust privacy request portal
+- **BeenVerified:** direct opt-out search; if verification fails, the app provides a pre-filled fallback request to `privacy@beenverified.com`
+- **Hunter:** preferred Claim workflow, with `privacy@hunter.io` as an alternative privacy-rights contact
+- **Snov.io:** privacy/deletion route plus documented `help@snov.io` and `snovio_dpo@snov.io` contacts
+
+The app deliberately does not attempt to inject profile data into third-party sites. Cross-origin browser protections make that unreliable and unsafe for a static site. Instead, saved local values are exposed through one-click copy controls.
 
 ## Usage
 
-Open `index.html` directly in any browser. No build step, no dependencies, no install.
+Open `index.html` directly in a browser or use the hosted version:
+
+https://mccab22k.github.io/nomoredatabrokers
+
+No build step, dependencies, account, or backend are required.
 
 ```bash
 git clone https://github.com/mccab22k/nomoredatabrokers
 open nomoredatabrokers/index.html
 ```
 
-Or use the hosted version at: https://mccab22k.github.io/nomoredatabrokers
-
-## Why this is free
-
-Data brokers make money two ways: selling your data, and charging you to keep it off their platforms. That's extortion with extra steps. Privacy shouldn't cost a subscription. This tool exists because opting out is your legal right under CCPA, GDPR, and an increasing number of state laws — you just need to know where to go and when to go back.
-
 ## Broker tiers
 
 | Tier | What they are | Why hit them first |
 |---|---|---|
-| **1** | Acxiom, LexisNexis, Spokeo, Whitepages, BeenVerified | Feeder brokers — they supply data to hundreds of downstream sites. Removal here has a multiplier effect. |
-| **2** | ZoomInfo, Apollo.io, Lusha, RocketReach, Clearbit | B2B professional brokers — sell your work email, direct dial, job title, and org chart to sales teams. |
-| **3** | Radaris, TruthFinder, Instant Checkmate, US Search | Consumer people-search — home address, relatives, criminal/civil records. |
-| **4** | Epsilon, CoreLogic, Neustar, Datalogix | Ad and data enrichment networks — power the targeted advertising ecosystem. |
+| **1** | Acxiom, LexisNexis, Spokeo, Whitepages, BeenVerified | Feeder / high-value consumer brokers |
+| **2** | ZoomInfo, Apollo.io, Lusha, RocketReach, Hunter, Snov.io | B2B professional brokers selling work identity and contact data |
+| **3** | Radaris, TruthFinder, Instant Checkmate, US Search | Consumer people-search sites |
+| **4** | Epsilon, CoreLogic, Neustar, Datalogix | Advertising and data-enrichment networks |
+
+## Privacy model
+
+Profile data may include:
+
+- Name and former name / alias
+- Current city
+- Any number of previous cities
+- Any number of personal, work, or other email addresses
+- Any number of phone numbers
+- Optional current and previous employer
+
+All of this stays in `localStorage`. The app contains a profile-only delete control and a full local-data delete control.
+
+## Email requests
+
+The Email Requests tab only lists brokers for which a privacy email is explicitly configured. Requests are generated separately for each broker rather than encouraging a single BCC blast, so each company receives a request addressed to its own privacy team with the locally stored identifying details needed to locate the record.
 
 ## California residents
 
-The DELETE Act (SB 362) created the DROP portal — a single authenticated request that directs all registered California data brokers to delete your data. As of August 2026, brokers are required to process these requests within 45 days.
+The California DROP portal provides a centralized deletion mechanism for registered data brokers:
 
-→ [California DROP portal](https://privacyportal.cppa.ca.gov/)
+https://privacyportal.cppa.ca.gov/
 
-## Important: removals expire
+## Important: removals can reappear
 
-Brokers continuously re-scrape public records, company websites, LinkedIn, and each other. Even after a confirmed removal, your profile can reappear within 3–6 months. This tool tracks re-check due dates and surfaces expired removals automatically.
-
-Set a calendar reminder to re-open this every 3 months.
+Data brokers continuously rebuild records from public and commercial sources. The tracker stores a broker-specific re-check date after a removal is confirmed so users can revisit it later.
 
 ## Contributing
 
-PRs welcome — especially:
-- New brokers with verified opt-out URLs
-- Updated URLs when portals change
-- Additional state-level callouts (Texas, Virginia, Colorado DROP equivalents)
+PRs are welcome, especially for:
 
-Please verify opt-out URLs are live before submitting. Broker portals change frequently.
+- Verified current opt-out URLs
+- Documented privacy-request email addresses
+- New brokers
+- Changed verification or deletion workflows
+- Additional state-level centralized deletion tools
 
-## Opt-out links
-
-All opt-out links in this tool are direct URLs to each company's privacy portal. They are not affiliate links and this project is not affiliated with any data broker, removal service, or privacy company.
+Please verify broker routes before submitting changes. Third-party privacy portals change frequently.
 
 ## License
 
