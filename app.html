@@ -5,34 +5,128 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>No More Data Brokers — Reclaim Your Data</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:#0e0e10;color:#f0f0f2;line-height:1.5}
-:root{--bg:#0e0e10;--surface:#18181b;--surface2:#1f1f23;--border:#2a2a30;--border2:#3a3a44;--text:#f0f0f2;--muted:#a0a0aa;--muted2:#6a6a76;--accent:#7c6af7;--accentbg:#1a1730;--success:#34d399;--successbg:#0d2720;--warn:#fbbf24;--warnbg:#211a07;--danger:#f87171;--dangerbg:#220f0f;--r:10px}
-button,input,select{font:inherit}.privacy{position:sticky;top:0;z-index:30;padding:8px 18px;background:#0a0a12;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--success);margin-right:7px}.wrap{max-width:920px;margin:auto;padding:28px 18px 64px}
-.hero{text-align:center;padding:24px 0 26px;border-bottom:1px solid var(--border);margin-bottom:20px}.hero h1{margin:0 0 8px;font-size:clamp(26px,5vw,38px)}.hero h1 span{color:var(--accent)}.hero p{max-width:620px;margin:0 auto;color:var(--muted);font-size:14px}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 18px}.tab,.btn{border:1px solid var(--border2);background:transparent;color:var(--muted);border-radius:999px;padding:7px 12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}.tab.active,.btn.primary{border-color:var(--accent);background:var(--accentbg);color:#c9c2ff}.btn.success{color:var(--success);background:var(--successbg);border-color:#1a5c48}.btn.danger{color:var(--danger);background:var(--dangerbg);border-color:#5c2020}.btn.sm{font-size:12px;padding:5px 9px}.view{display:none}.view.active{display:block}
-.card,.section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}.section h3,.section h2{margin-top:0}.muted{color:var(--muted)}.tiny{font-size:12px}.section-head{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);margin:24px 0 8px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:680px){.grid2{grid-template-columns:1fr}.broker{grid-template-columns:1fr}.broker-actions{justify-content:flex-start}}
-label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}input[type=text],input[type=email],input[type=tel],select{width:100%;border:1px solid var(--border2);background:var(--surface2);color:var(--text);border-radius:8px;padding:9px 10px}input:focus,select:focus{outline:none;border-color:var(--accent)}
-.repeat-list{display:flex;flex-direction:column;gap:8px}.repeat-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.repeat-row.email-row{grid-template-columns:110px minmax(0,1fr) auto}.repeat-add{margin-top:8px}
-.broker{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}.broker-name{font-weight:650}.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}.badge{font-size:11px;border:1px solid var(--border);background:var(--surface2);border-radius:5px;padding:2px 7px;color:var(--muted)}.broker-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.progress{height:7px;background:var(--border);border-radius:99px;overflow:hidden;margin:8px 0 12px}.progress>div{height:100%;background:linear-gradient(90deg,var(--accent),var(--success))}
-.callout{border:1px solid #3d3580;background:var(--accentbg);border-radius:var(--r);padding:14px;margin-bottom:14px}.warn{border-color:#5c4610;background:var(--warnbg)}.successbox{border-color:#1a5c48;background:var(--successbg)}.dangerbox{border-color:#5c2020;background:var(--dangerbg)}
-.clip-row,.email-row-card{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}.clip-row:last-child,.email-row-card:last-child{border-bottom:0}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}
-.template{white-space:pre-wrap;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
-.queue-check{display:flex;gap:10px;align-items:flex-start}.queue-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.empty{color:var(--muted2);padding:20px;text-align:center}.footer{color:var(--muted2);font-size:12px;text-align:center;margin-top:30px}.footer a{color:var(--muted)}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+:root{
+  --paper:#f1f5ee;--surface:#f8faf6;--ink:#101611;--muted:#4d5a50;--line:#101611;
+  --accent:#087a3d;--accent-soft:#dfe7df;--panel:#0b3d22;--panel-ink:#f2fff5;
+  --danger:#a4261d;--danger-soft:#f4e1de;--warn:#775b00;--warn-soft:#f3ecd0
+}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--paper);color:var(--ink);line-height:1.45}
+button,input,select{font:inherit}
+a{color:inherit}
+.privacy{
+  position:sticky;top:0;z-index:30;min-height:58px;padding:0 22px;background:var(--paper);
+  border-bottom:2px solid var(--line);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px
+}
+.brand{font-family:Arial Black,Arial,sans-serif;font-size:22px;font-weight:900;letter-spacing:-.07em}
+.privacy-copy,#banner-profile{
+  font-family:"Courier New",monospace;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase
+}
+.privacy-copy{color:var(--muted)}
+#banner-profile{text-align:right}
+.dot{display:inline-block;width:7px;height:7px;background:var(--accent);margin-right:7px}
+.wrap{width:min(1120px,calc(100% - 32px));margin:auto;border-left:2px solid var(--line);border-right:2px solid var(--line);min-height:calc(100vh - 58px)}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.44fr);padding:0;border-bottom:2px solid var(--line);margin:0}
+.hero-main{padding:48px 28px 44px;border-right:2px solid var(--line)}
+.eyebrow,.hero-note span,.hero-note p,.section-head,.tabs,.badge,label,.tiny,.footer{
+  font-family:"Courier New",monospace
+}
+.eyebrow{margin-bottom:14px;color:var(--accent);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.hero h1{
+  max-width:11ch;margin:0 0 22px;font-family:Arial Black,Arial,sans-serif;font-size:clamp(48px,7.2vw,82px);
+  font-weight:900;letter-spacing:-.065em;line-height:.88;text-transform:uppercase
+}
+.hero h1 span{color:inherit}
+.hero p{max-width:62ch;margin:0;color:var(--ink);font-size:17px;line-height:1.5}
+.hero-note{display:flex;flex-direction:column;justify-content:space-between;gap:34px;padding:28px;background:var(--panel);color:var(--panel-ink)}
+.hero-note span{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.hero-note strong{max-width:17ch;font-size:clamp(22px,2.4vw,30px);letter-spacing:-.035em;line-height:1.08}
+.hero-note p{color:var(--panel-ink);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.tabs{display:flex;gap:0;flex-wrap:wrap;margin:0;padding:0 28px;border-bottom:2px solid var(--line)}
+.tab,.btn{
+  appearance:none;border:0;border-right:1px solid var(--line);background:transparent;color:var(--ink);
+  border-radius:0;padding:10px 12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+  font-family:"Courier New",monospace;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase
+}
+.tab:first-child{border-left:1px solid var(--line)}
+.tab:hover,.btn:hover,.tab:focus-visible,.btn:focus-visible{background:var(--accent-soft);outline:none}
+.tab.active{background:var(--ink);color:var(--paper)}
+.btn.primary{color:var(--accent);border-bottom:1px solid var(--accent)}
+.btn.success{color:var(--accent);border-bottom:1px solid var(--accent)}
+.btn.danger{color:var(--danger);border-bottom:1px solid var(--danger)}
+.btn.sm{font-size:10px;padding:6px 8px}
+.view{display:none;padding:24px 28px 10px}.view.active{display:block}
+.card,.section{background:var(--surface);border:1px solid var(--line);border-radius:0;padding:16px;margin-bottom:14px}
+.section h3,.section h2{margin-top:0}.muted{color:var(--muted)}.tiny{font-size:11px;line-height:1.5}
+.section-head{
+  margin:28px 0 0;padding:9px 0 8px;border-bottom:2px solid var(--line);color:var(--ink);
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase
+}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+input[type=text],input[type=email],input[type=tel],select{
+  width:100%;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:0;padding:9px 10px
+}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.repeat-list{display:flex;flex-direction:column;gap:8px}.repeat-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.repeat-row.email-row{grid-template-columns:110px minmax(0,1fr) auto}.repeat-add{margin-top:8px}
+.broker{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin:0;padding:15px 0;
+  border:0;border-bottom:1px solid var(--line);background:transparent
+}
+.broker-name{font-family:Arial Black,Arial,sans-serif;font-weight:900;font-size:18px;letter-spacing:-.025em}
+.meta{display:flex;gap:0;flex-wrap:wrap;margin-top:5px}
+.badge{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.badge+ .badge:before{content:" / ";padding:0 6px;color:var(--accent)}
+.broker-actions{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.broker-actions select{width:auto;min-width:126px;font-family:"Courier New",monospace;font-size:10px;font-weight:700;text-transform:uppercase}
+.progress{height:10px;background:transparent;border:1px solid var(--line);overflow:hidden;margin:10px 0 12px}
+.progress>div{height:100%;background:var(--accent)}
+.callout{
+  border:0;border-left:7px solid var(--accent);background:var(--accent-soft);border-radius:0;padding:15px 16px;margin-bottom:18px
+}
+.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.successbox{border-left:7px solid var(--accent)}
+.dangerbox{border-left:7px solid var(--danger);background:var(--danger-soft)}
+.clip-row,.email-row-card{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.clip-row:last-child,.email-row-card:last-child{border-bottom:0}
+.mono{font-family:"Courier New",monospace;word-break:break-word;font-size:12px}
+.template{white-space:pre-wrap;background:var(--paper);border:1px solid var(--line);border-radius:0;padding:14px;font-family:"Courier New",monospace;font-size:12px}
+.queue-check{display:flex;gap:10px;align-items:flex-start}.queue-actions{display:flex;gap:0;flex-wrap:wrap;margin:12px 0}
+.empty{color:var(--muted);padding:22px 0;font-family:"Courier New",monospace;font-size:11px}
+.footer{color:var(--muted);font-size:10px;line-height:1.5;text-align:left;margin-top:28px;padding:18px 0 24px;border-top:2px solid var(--line)}
+.footer a{color:var(--accent)}
+@media(max-width:760px){
+  .privacy{grid-template-columns:auto 1fr;padding:10px 16px;gap:10px 16px}.privacy-copy{display:none}#banner-profile{text-align:right}
+  .wrap{width:100%;border-left:0;border-right:0}.hero{grid-template-columns:1fr}.hero-main{padding:38px 20px 34px;border-right:0;border-bottom:2px solid var(--line)}
+  .hero-note{padding:24px 20px}.tabs{padding:0}.view{padding:20px 18px 8px}.grid2{grid-template-columns:1fr}.broker{grid-template-columns:1fr}.broker-actions{justify-content:flex-start}
+}
+@media(max-width:520px){
+  .hero h1{font-size:45px}.repeat-row.email-row{grid-template-columns:1fr auto}.repeat-row.email-row select{grid-column:1/-1}
+  .broker-actions{display:grid;grid-template-columns:1fr 1fr}.broker-actions select{grid-column:1/-1;width:100%}
+  .tab{flex:1 1 auto;justify-content:center}.clip-row,.email-row-card{align-items:flex-start;flex-direction:column}
+}
 </style>
 </head>
 <body>
 <div class="privacy">
-  <div><span class="dot"></span><strong>Local-only:</strong> profile and progress stay in this browser.</div>
+  <div class="brand">NMDB_</div>
+  <div class="privacy-copy"><span class="dot"></span>Local-only / profile + progress stay in this browser</div>
   <div id="banner-profile">No saved profile</div>
 </div>
 
 <main class="wrap">
   <header class="hero">
-    <h1>No More <span>Data Brokers</span></h1>
-    <p>Track opt-outs, keep all identifying data local, and generate form-ready or email-ready removal requests without a subscription.</p>
+    <div class="hero-main">
+      <div class="eyebrow">Privacy utility / open source / no subscription</div>
+      <h1>No More Data Brokers</h1>
+      <p>A practical checklist for finding data-broker records, submitting removal requests, and remembering when to check again. Your identifying information stays on your device.</p>
+    </div>
+    <aside class="hero-note">
+      <span>Working principle</span>
+      <strong>Your data should not cost money to remove.</strong>
+      <p>No account · no backend · no tracking</p>
+    </aside>
   </header>
 
   <nav class="tabs">
